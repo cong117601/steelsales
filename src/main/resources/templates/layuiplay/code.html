@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>代码修饰器</title>
+    <link rel="stylesheet" href="../static/layui/css/layui.css">
+
+</head>
+<body>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend>默认修饰</legend>
+</fieldset>
+
+<pre class="layui-code">//在里面存放任意的代码
+Lay.fn.event = function(modName, events, params){
+  var that = this, result = null, filter = events.match(/\(.*\)$/)||[];
+  var set = (events = modName + '.'+ events).replace(filter, '');
+};
+      </pre>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+    <legend>notepad风格</legend>
+</fieldset>
+
+<pre class="layui-code"  lay-skin="notepad">//代码区域
+Lay.fn.event = function(modName, events, params){
+  var that = this, result = null, filter = events.match(/\(.*\)$/)||[];
+  var set = (events = modName + '.'+ events).replace(filter, '');
+};
+      </pre>
+
+<script src="../static/layui/layui.js"></script>
+<script>
+    layui.use('code', function () {
+         layui.code({
+                 title:'JavaScript'
+         }
+
+         );
+
+    })
+
+</script>
+</body>
+</html>

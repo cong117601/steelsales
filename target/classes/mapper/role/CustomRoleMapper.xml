@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ycxy.steelsales.mapper.role.CustomRoleMapper">
+    <select id="selectAllRoleName" resultType="String">
+        select role_name roleName from steelsale_role
+    </select>
+
+    <select id="selectRoleNameByLoginName" parameterType="java.lang.String"
+            resultType="java.lang.String">
+
+
+        SELECT sr.role_name FROM steelsale_role sr
+        LEFT JOIN steelsale_employee_role ser
+        ON sr.role_id = ser.role_id
+        LEFT JOIN steelsale_employee se
+        ON se.employee_id = ser.employee_id
+        WHERE se.login_name = #{loginName}
+    </select>
+</mapper>

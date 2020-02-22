@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>弹出层</title>
+    <link rel="stylesheet" href="../static/layui/css/layui.css">
+<style>
+    .demo-class .layui-layer-title{background:#c00; color:#fff; border: none;}
+</style>
+</head>
+<body style="padding: 20px">
+<button type="button" class="layui-btn " id="btn1">layer.open.type=0</button>
+<button type="button" class="layui-btn " id="btn2">layer.open.type=1</button>
+<button type="button" class="layui-btn " id="btn3">layer.open.type=2</button>
+<button type="button" class="layui-btn " id="btn4">tab</button>
+
+<script src="../static/layui/layui.js"></script>
+<script>
+    layui.use(['jquery', 'layer', 'element'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var element = layui.element;
+        //alert
+        $("#btn1").click(function () {
+            layer.open({
+                type: 0,
+                title: '提示',
+                content: '你好吗？',
+                skin: 'demo-class',
+                btn: ['按钮一', '按钮二', '按钮三']
+                ,yes: function(index, layero){
+                    //按钮【按钮一】的回调
+                    alert("按钮一")
+                    layer.close(index)
+                }
+                ,btn2: function(index, layero){
+                    //按钮【按钮二】的回调
+                    alert("按钮二")
+                    //return false 开启该代码可禁止点击该按钮关闭
+                }
+                ,btn3: function(index, layero){
+                    //按钮【按钮三】的回调
+                    alert("按钮三")
+                    //return false 开启该代码可禁止点击该按钮关闭
+                }
+                ,cancel: function(){
+                    //右上角关闭回调
+
+                    //return false 开启该代码可禁止点击该按钮关闭
+                }
+                ,btnAlign: 'l'
+                //,closeBtn: '2'
+                // ,shade:false
+                //,shadeClose:true
+
+            });
+
+        });
+        //confirm
+        $("#btn2").click(function () {
+
+        });
+        //prompt
+        $("#btn3").click(function () {
+
+        });
+        //tab
+        $("#btn4").click(function () {
+
+        });
+
+    })
+
+</script>
+</body>
+</html>

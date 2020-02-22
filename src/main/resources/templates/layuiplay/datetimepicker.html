@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>时间日期选择器</title>
+    <link rel="stylesheet" href="../static/layui/css/layui.css">
+
+</head>
+<body style="padding: 20px">
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend>常规用法</legend>
+</fieldset>
+
+<div class="layui-form">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">中文版</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" id="test1" placeholder="yyyy年MM月dd日 HH时mm分ss秒">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">国际版</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" id="test1-1" placeholder="yyyy-MM-dd">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">初始值</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" id="test1-2" placeholder="yyyy-MM-dd">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="../static/layui/layui.js"></script>
+<script>
+    layui.use(['jquery', 'element', 'laydate'], function () {
+        var $ = layui.jquery;
+        var element = layui.element;
+        var laydate = layui.laydate;
+        //中文版
+        laydate.render({
+            elem: '#test1',//指定元素
+            format: 'yyyy年MM月dd日 HH时mm分ss秒'
+        });
+        //国际版
+        laydate.render({
+            elem: '#test1-1',
+            lang: 'en',
+            theme: 'molv',
+            type: 'datetime',
+            range: true
+        });
+        //初始值
+        laydate.render({
+            elem: '#test1-2', //指定元素
+            value: new Date(),
+            type: 'datetime',
+            // min:'2020-01-01',
+            // max:'2021-01-01'
+            // min: -7,
+            // max: 7,
+            trigger: 'click',
+            show: true,
+            calendar: true,
+            mark:
+                {'0-9-18': '国耻',
+                 '0-6-11':'生日'}
+            ,ready: function(date){
+                console.log(date); //得到初始的日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
+            }
+        });
+    })
+
+</script>
+</body>
+</html>

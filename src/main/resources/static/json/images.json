@@ -1,0 +1,19 @@
+{
+  "title": "相册标题",
+  "id": 123,
+  "start": 0,
+  "data": [
+    {
+      "alt": "图片名",
+      "pid": 666,
+      "src": "../static/images/1.jpg",
+      "thumb": "././static/images/1.jpg"
+    },
+    {
+      "alt": "图片名",
+      "pid": 666,
+      "src": "../src/main/resources/static/images/2.jpg",
+      "thumb": "../src/main/resources/static/images/2.jpg"
+    }
+  ]
+}

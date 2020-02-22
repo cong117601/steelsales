@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>评分</title>
+    <link rel="stylesheet" href="../static/layui/css/layui.css">
+
+</head>
+<body style="padding:  20px">
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend>基础效果</legend>
+</fieldset>
+
+<div id="test1"></div>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend>显示文字</legend>
+</fieldset>
+
+<div id="test2"></div>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend>半星效果</legend>
+</fieldset>
+
+<div id="test3"></div>
+<div><div id="test4"></div></div>
+<script src="../static/layui/layui.js"></script>
+<script>
+    layui.use(['jquery', 'rate'], function () {
+        var $ = layui.jquery;
+        var rate = layui.rate;
+        //基础效果
+        rate.render({
+            elem: '#test1'
+            ,theme:'#1E9FFF'
+
+        });
+        //显示文字
+        rate.render({
+            elem:'#test2',
+            value:2,//初始值
+            text:true,//开启文本
+            //readonly:true //只读模式
+            choose: function(value){
+                if(value > 4) alert( '么么哒' )
+            }
+        });
+        //半星效果
+        rate.render({
+            elem:'#test3',
+            length:3,
+            value:1.5,
+            text:true,
+            half:true
+        });
+        rate.render({
+            elem: '#test4'
+            ,value: 3.5
+            ,half: true
+            ,text: true
+        });
+
+    })
+
+</script>
+</body>
+</html>

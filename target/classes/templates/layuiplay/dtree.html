@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>dtree</title>
+    <link rel="stylesheet" href="../static/layui/css/layui.css">
+    <link rel="stylesheet" href="../static/layui/css/layui.css">
+    <link rel="stylesheet" href="../static/layui_ext/dtree/dtree.css">
+    <link rel="stylesheet" href="../static/layui_ext/dtree/font/dtreefont.css">
+</head>
+<input type="button" class="layui-btn" id="btn1" value="选中武汉市"></input>
+<input type="button" class="layui-btn" id="btn2" value="得到选中值"></input>
+<ul id="demoTree" class="dtree" data-id="0"></ul>
+
+<script src="../static/layui/layui.js"></script>
+<script>
+    layui.extend({
+        dtree: '../static/layui_ext/dist/dtree'   // {/}的意思即代表采用自有路径，即不跟随 base 路径
+    }).use(['jquery',  'layer', 'form' ,'dtree'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var dtree = layui.dtree;
+
+        // 初始化树 标准的json
+        // var DemoTree = dtree.render({
+        //     elem: "#demoTree",
+        //     url: "../static/json/asyncTree1.json" // 使用url加载（可与data加载同时存在）
+        // });
+        // 初始化树 layui数据风格的json
+        // dtree.render({
+        //     elem: "#demoTree",
+        //     url: "../static/json/asyncTree2.json",
+        //     dataStyle: "layuiStyle",  //使用layui风格的数据格式
+        //     response:{message:"msg",statusCode:0}  //修改response中返回数据的定义
+        // });
+        //list 数据风格
+        // dtree.render({
+        //     elem: "#demoTree",
+        //     url: "../static/json/asyncTree3.json",
+        //     dataFormat: "list",  //使用list风格的数据格式
+        //     checkbar:true //开启复选框
+        // });
+        //list 和layui数据风格
+        var DemoTree=dtree.render({
+            elem: "#demoTree",
+            url: "../static/json/asyncTree4.json",
+            dataStyle: "layuiStyle",  //使用layui风格的数据格式
+            dataFormat: "list",  //使用list风格的数据格式
+            checkbar:true //开启复选框
+        });
+        //图标点击
+        dtree.on("changeTree('demoTree')" ,function(obj){
+            console.log(obj.param); // 点击当前节点传递的参数
+            console.log(obj.dom); // 当前节点的jquery对象
+            console.log(obj.show); // 节点展开为true，关闭为false
+        });
+        //节点点击
+        dtree.on("node('demoTree')" ,function(obj){
+            console.log(obj.param); // 点击当前节点传递的参数
+            console.log(obj.dom); // 当前节点的jquery对象
+            console.log(obj.childParams); // 当前节点的所有子节点参数
+            console.log(obj.parentParam); // 当前节点的父节点参数
+        });
+        //节点双击
+        //监听点击
+        $("#btn1").click(function (obj) {
+            var params = dtree.dataInit("demoTree", "002001");
+        });
+        $("#btn2").click(function (obj) {
+            var param = dtree.getNowParam(DemoTree);
+            console.log(param);
+
+        });
+
+    });
+
+
+</script>
+</body>
+</html>

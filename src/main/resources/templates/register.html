@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../static/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../static/css/login.css" media="all">
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+<div class="layui-container">
+    <div class="admin-login-background">
+        <div class="layui-form login-form">
+            <form class="layui-form">
+                <div class="layui-form-item logo-title">
+                    <h1>注册用户</h1>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-icon layui-icon-username"></label>
+                    <input type="text" name="loginName" lay-verify="required|account" placeholder="用户名"
+                           autocomplete="off" class="layui-input" value="">
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-icon layui-icon-user"></label>
+                    <input type="text" name="employeeName" lay-verify="required|account" placeholder="真实姓名"
+                           autocomplete="off" class="layui-input" value="">
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-icon layui-icon-cellphone"></label>
+                    <input type="text" name="employeeTel" lay-verify="required|phone" placeholder="电话"
+                           autocomplete="off" class="layui-input" value="">
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-icon layui-icon-email"></label>
+                    <input type="text" name="employeeEmail" lay-verify="email" placeholder="邮箱"
+                           autocomplete="off" class="layui-input" value="">
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-icon layui-icon-password"></label>
+                    <input type="password" name="loginPwd" lay-verify="required|password" placeholder="密码"
+                           autocomplete="off" class="layui-input" value="">
+                </div>
+
+<!--                <div class="layui-form-item">-->
+<!--                    <label class="layui-icon layui-icon-user " ></label>-->
+<!--                        <select  name="modules" lay-verify="required" lay-search="">-->
+<!--                            <option value="">请选择角色</option>-->
+
+<!--                        </select>-->
+<!--                </div>-->
+                <div class="layui-form-item">
+                    <label class="layui-icon layui-icon-vercode"></label>
+                    <input type="text" name="captcha" lay-verify="required|captcha" placeholder="验证码" autocomplete="off"
+                           class="layui-input verification captcha" value="">
+                    <div class="captcha-img"><!-- src="../static/images/captcha.jpg"-->
+                        <img id="captchaPic"
+                             onclick="javascript:this.src= 'http://localhost:80/ran/random?random='+Math.random()"
+                             src="http://localhost:80/ran/random">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-form-item">
+                        <div class="layui-btn-container">
+                            <button type="button" class="layui-btn  layui-btn-radius" lay-submit=""
+                                    lay-filter="register">注册
+                            </button>
+                            <button type="reset" class="layui-btn layui-btn-radius" lay-submit="">清空</button>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+<script src="../static/js/jquery-3.4.1.min.js" charset="utf-8"></script>
+<script src="../static/layui/layui.js" charset="utf-8"></script>
+<script src="../static/js/jq-module/jquery.particleground.min.js" charset="utf-8"></script>
+<script>
+    layui.use(['form'], function () {
+        var form = layui.form,
+            layer = layui.layer;
+
+        // 登录过期的时候，跳出ifram框架
+        if (top.location != self.location) top.location = self.location;
+
+        // 粒子线条背景
+        $(document).ready(function () {
+            $('.layui-container').particleground({
+                dotColor: '#5cbdcc',
+                lineColor: '#5cbdaa'
+            });
+        });
+        // 进行注册操作
+        form.on('submit(register)', function (data) {
+            data = data.field;
+            if (data.username == '') {
+                layer.msg('用户名不能为空');
+                return false;
+            }
+            if (data.email == '') {
+                layer.msg('邮箱不能为空');
+                return false;
+            }
+            if (data.password == '') {
+                layer.msg('密码不能为空');
+                return false;
+            }
+            if (data.captcha == '') {
+                layer.msg('验证码不能为空');
+                return false;
+            }
+            //发送ajax请求
+            $.ajax({
+                //提交数据的路径
+                url: '/employee/register',
+                data: data,
+                method: 'post',
+                dataType: 'JSON',
+                success: function (res) {
+                    if (res.code == 0) {
+                        layer.alert("注册成功", {
+                                icon: 6
+                            },
+                            function () {
+                                window.location = 'login.html';
+                            })
+                    } else {
+                        layer.alert(res.msg, {
+                            icon: 5
+                        });
+                    }
+                },
+                error: function (data) {
+                }
+            });
+            layer.msg('注册成功', function () {
+                window.location = 'login.html';
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>
