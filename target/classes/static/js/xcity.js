@@ -13,7 +13,6 @@
     this.showP  = function(provinceList) {
 
         this.p.html('');
-
         is_pName = false;
         
         for (var i in provinceList) {
