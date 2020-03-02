@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ycxy.steelsales.mapper.employeepicture.SteelsaleEmployeePictureMapper">
+    <resultMap id="BaseResultMap" type="com.ycxy.steelsales.pojo.employeepicture.SteelsaleEmployeePicture">
+        <id column="picture_id" property="pictureId" jdbcType="INTEGER"/>
+        <result column="employee_id" property="employeeId" jdbcType="INTEGER"/>
+        <result column="picture_src" property="pictureSrc" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    picture_id, employee_id, picture_src
+  </sql>
+    <select id="selectByExample" resultMap="BaseResultMap"
+            parameterType="com.ycxy.steelsales.pojo.employeepicture.SteelsaleEmployeePictureExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from steelsale_employee_picture
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from steelsale_employee_picture
+        where picture_id = #{pictureId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from steelsale_employee_picture
+    where picture_id = #{pictureId,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteByExample"
+            parameterType="com.ycxy.steelsales.pojo.employeepicture.SteelsaleEmployeePictureExample">
+        delete from steelsale_employee_picture
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.ycxy.steelsales.pojo.employeepicture.SteelsaleEmployeePicture">
+    insert into steelsale_employee_picture (picture_id, employee_id, picture_src
+      )
+    values (#{pictureId,jdbcType=INTEGER}, #{employeeId,jdbcType=INTEGER}, #{pictureSrc,jdbcType=VARCHAR}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.ycxy.steelsales.pojo.employeepicture.SteelsaleEmployeePicture">
+        insert into steelsale_employee_picture
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pictureId != null">
+                picture_id,
+            </if>
+            <if test="employeeId != null">
+                employee_id,
+            </if>
+            <if test="pictureSrc != null">
+                picture_src,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="pictureId != null">
+                #{pictureId,jdbcType=INTEGER},
+            </if>
+            <if test="employeeId != null">
+                #{employeeId,jdbcType=INTEGER},
+            </if>
+            <if test="pictureSrc != null">
+                #{pictureSrc,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.ycxy.steelsales.pojo.employeepicture.SteelsaleEmployeePictureExample"
+            resultType="java.lang.Integer">
+        select count(*) from steelsale_employee_picture
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update steelsale_employee_picture
+        <set>
+            <if test="record.pictureId != null">
+                picture_id = #{record.pictureId,jdbcType=INTEGER},
+            </if>
+            <if test="record.employeeId != null">
+                employee_id = #{record.employeeId,jdbcType=INTEGER},
+            </if>
+            <if test="record.pictureSrc != null">
+                picture_src = #{record.pictureSrc,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update steelsale_employee_picture
+        set picture_id = #{record.pictureId,jdbcType=INTEGER},
+        employee_id = #{record.employeeId,jdbcType=INTEGER},
+        picture_src = #{record.pictureSrc,jdbcType=VARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.ycxy.steelsales.pojo.employeepicture.SteelsaleEmployeePicture">
+        update steelsale_employee_picture
+        <set>
+            <if test="employeeId != null">
+                employee_id = #{employeeId,jdbcType=INTEGER},
+            </if>
+            <if test="pictureSrc != null">
+                picture_src = #{pictureSrc,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where picture_id = #{pictureId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.ycxy.steelsales.pojo.employeepicture.SteelsaleEmployeePicture">
+    update steelsale_employee_picture
+    set employee_id = #{employeeId,jdbcType=INTEGER},
+      picture_src = #{pictureSrc,jdbcType=VARCHAR}
+    where picture_id = #{pictureId,jdbcType=INTEGER}
+  </update>
+    <update id="updateScrByEid" >
+     update steelsale_employee_picture
+    set picture_src=#{employeeImage}
+    where employee_id=#{employeeId}
+  </update>
+</mapper>

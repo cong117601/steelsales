@@ -86,7 +86,6 @@
 	    if (h == null || h == '') {
 	        var h=($(window).height() - 50);
 	    };
-
 	    var index = layer.open({
 	        type: 2,
 	        area: [w+'px', h +'px'],
@@ -98,11 +97,9 @@
 	        content: url
 	    });
 	    if(full){
-            layer.full(index);
-        }
+	       layer.full(index); 
+	    }
 	}
-
-
 	/**
 	 * [close 关闭弹出层]
 	 * @return {[type]} [description]

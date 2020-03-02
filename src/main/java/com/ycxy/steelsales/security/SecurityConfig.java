@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()//加上csrf保护措施
                 .disable()
                 .authorizeRequests()//需要授权的请求
-                .antMatchers( "/","/ran/random","/employee/sendEmail","/password","/register","/employee/register").permitAll()//允许匿名访问的url
+                .antMatchers( "/","/ran/random","/employee/sendEmail","/password","/register","/employee/register","/employee/sendPhone").permitAll()//允许匿名访问的url
                 .anyRequest().hasAnyAuthority("ROLE_BOSS")//老板所有路径都可以访问
 //                .antMatchers("/admin/user/getuserList",
 //                        "/admin/user/updateUserPwd",

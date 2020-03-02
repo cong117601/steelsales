@@ -1,8 +1,12 @@
 package com.ycxy.steelsales.pojo.employee;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.io.Serializable;
 import java.util.Date;
 
-public class SteelsaleEmployee {
+public class SteelsaleEmployee implements Serializable {
     private Integer employeeId; //员工id
 
     private String loginName;//登陆名
@@ -21,8 +25,9 @@ public class SteelsaleEmployee {
 
     private String employeeTel;//员工电话
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;//创建时间
-
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date updateTime;//更新时间
 
     public Integer getEmployeeId() {

@@ -193,7 +193,6 @@ public class SendMail {
      */
     public boolean setDate(long millisecond) throws MessagingException {
         Date date = new Date();
-        System.out.println(date);
         date.setTime(date.getTime() + millisecond);
         try {
             mimeMessage.setSentDate(date);

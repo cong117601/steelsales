@@ -2,10 +2,7 @@ package com.ycxy.steelsales.controller.main;
 
 import com.ycxy.steelsales.pojo.employee.SteelsaleEmployee;
 import com.ycxy.steelsales.service.employee.EmployeeService;
-import com.ycxy.steelsales.util.Md5Utils;
-import com.ycxy.steelsales.util.RedisUtil;
-import com.ycxy.steelsales.util.SendMail;
-import com.ycxy.steelsales.util.SteelSaleResult;
+import com.ycxy.steelsales.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +19,7 @@ import java.util.Random;
 /**
  * 找到密码
  * 发送邮箱
+ * 发送短信
  */
 @Controller
 public class PassWordController {
@@ -29,6 +27,8 @@ public class PassWordController {
     private EmployeeService employeeService;
     @Autowired
     private RedisUtil redisUtil;
+    @Autowired
+    private SendSms sendSms;
 
     /**
      * 找回密码
@@ -37,10 +37,9 @@ public class PassWordController {
     @ResponseBody
     public SteelSaleResult findPassWord(HttpServletRequest request) throws MessagingException, IOException {
         SteelSaleResult result = new SteelSaleResult();
-        String email = request.getParameter("email");
+        String email = request.getParameter("emailOrPhone");
         String captcha = request.getParameter("captcha");
         String code = (String) redisUtil.get("code");//redis中取得的验证码
-        System.out.println(email + captcha);
         if (code == null || !captcha.equals(code)) {
             result.setMsg("请出入正确的验证码");
             return result;
@@ -78,6 +77,42 @@ public class PassWordController {
             result.setCode(0);
             return result;
         }
+        return result;
+    }
+
+    /**
+     * 发送电话找回密码
+     */
+    @RequestMapping("/employee/sendPhone")
+    @ResponseBody
+    public SteelSaleResult findPassWordByPhone(HttpServletRequest request) {
+        SteelSaleResult result = new SteelSaleResult();
+        //获取请求参数
+        String captcha = request.getParameter("captcha");
+        String employeeTel = request.getParameter("emailOrPhone");
+        //获取缓存中的验证码
+        String code = (String) redisUtil.get("code");
+        //随机生成的新密码
+        String randCode = getRandCode(6);
+        if (captcha.equals(code)) {
+                //根据该员工电话是否存在
+                List<SteelsaleEmployee> steelsaleEmployees = employeeService.selectEmployeeByTel(employeeTel);
+                SteelsaleEmployee employee = steelsaleEmployees.get(0);
+                if (employee!=null){
+                    //若存在发送短信验证码
+                    SmsResult smsResult = sendSms.SendCode(employeeTel,randCode);
+                    // 发送成功之后修改该员工的密码
+                    if (!smsResult.getMessage().equals("OK")){
+                        result.setMsg("发送异常");
+                        return result;
+                    }
+                    employee.setLoginPwd(Md5Utils.stringToMD5(randCode));
+                    employeeService.updateEmployee(employee);
+                    result.setCode(0);
+                    return result;
+                }
+        }
+        result.setMsg("输入异常");
         return result;
     }
 

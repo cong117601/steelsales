@@ -1,10 +1,14 @@
 package com.ycxy.steelsales.service.employee.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.ycxy.steelsales.mapper.employee.SteelsaleEmployeeMapper;
+import com.ycxy.steelsales.pojo.employee.EmployeeQuery;
 import com.ycxy.steelsales.pojo.employee.SteelsaleEmployee;
 import com.ycxy.steelsales.pojo.employee.SteelsaleEmployeeExample;
 import com.ycxy.steelsales.service.employee.EmployeeService;
 import com.ycxy.steelsales.util.Md5Utils;
+import com.ycxy.steelsales.util.SteelSaleResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,4 +44,37 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setEmployeeSalary(3000.00);
         employeeMapper.insertSelective(employee);
     }
+
+    @Override
+    public SteelSaleResult selectAll(EmployeeQuery employeeQuery, Integer page, Integer limit) {
+        SteelSaleResult result =new SteelSaleResult();
+        //设置初始页面和条数
+        PageHelper.startPage((page-1)*limit,limit);
+        List<SteelsaleEmployee> steelsaleEmployees = employeeMapper.fuzzySelect(employeeQuery);
+        PageInfo pageInfo = new PageInfo(steelsaleEmployees);
+        result.setData(pageInfo.getList());
+        result.setCode(200);
+        result.setCount((int) pageInfo.getTotal());
+        return result;
+    }
+
+    @Override
+    public List<SteelsaleEmployee> selectEmployeeByTel(String tel) {
+        SteelsaleEmployeeExample employeeExample = new SteelsaleEmployeeExample();
+        SteelsaleEmployeeExample.Criteria criteria = employeeExample.createCriteria();
+        criteria.andEmployeeTelEqualTo(tel);
+        List<SteelsaleEmployee> steelsaleEmployees = employeeMapper.selectByExample(employeeExample);
+        return steelsaleEmployees;
+    }
+
+    @Override
+    public SteelsaleEmployee selectEmployeeById(Integer id) {
+        SteelsaleEmployee steelsaleEmployee = employeeMapper.selectByPrimaryKey(id);
+        return steelsaleEmployee;
+    }
+
+
+
+
+
 }

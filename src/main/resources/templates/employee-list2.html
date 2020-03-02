@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html class="x-admin-sm">
+<head>
+    <meta charset="UTF-8">
+    <title>员工列表</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible"  content=" IE=edge,chrome=1 text/html; charset=utf-8" >
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="stylesheet" href="../static/css/font.css">
+    <link rel="stylesheet" href="../static/css/xadmin.css">
+    <script src="../static/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../static/js/xadmin.js"></script>
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<!--页面初始设置开始-->
+<div class="x-nav">
+          <span class="layui-breadcrumb">
+            <a href="">首页</a>
+            <a href="">演示</a>
+            <a>
+              <cite>导航元素</cite></a>
+          </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+       onclick="location.reload()" title="刷新">
+        <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>
+</div>
+<!--页面初始设置结束-->
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <!--模糊查询模块开始-->
+                <div class="layui-card-body ">
+                    <form class="layui-form layui-col-space5">
+                        <div class="layui-inline layui-show-xs-block">
+                            <input type="text" name="employeeName" placeholder="请输入用户名" autocomplete="off"
+                                   class="layui-input" id="name">
+                        </div>
+
+                        <div class="layui-inline layui-show-xs-block">
+                            <label class="layui-form-label">是否在职:</label>
+                            <div class="layui-input-block" >
+                                <input type="radio" id="isStatu" name="status" value="0" title="在职">
+                                <input type="radio" id="isStatus" name="status" value="1" title="离职">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-show-xs-block">
+                            <label class="layui-form-label">开始时间:</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="createTime" id="starttime" readonly="true"
+                                       placeholder="yyyy-MM-dd HH:mm:ss"
+                                       autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-show-xs-block">
+                            <label class="layui-form-label">结束时间：</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="updateTime" id="endtime" readonly="true"
+                                       placeholder="yyyy-MM-dd HH:mm:ss"
+                                       autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item demoTable1">
+                            <button class="layui-btn" lay-submit="" lay-filter="search"
+                                    lay-event="sousuo"
+                                    data-type="searchByName">搜索
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <!--模糊查询模块结束-->
+                <!--头部工具栏开始-->
+                <div class="layui-card-header demoTable">
+                    <button class="layui-btn layui-btn-danger" data-type="batchDel">
+                        <i class="layui-icon"></i>批量删除
+                    </button>
+                    </button>
+                    <button class="layui-btn" onclick="xadmin.open('添加员工','/employee-add.html',600,400)"><i
+                            class="layui-icon"></i>添加
+                    </button>
+
+                </div>
+                <!--头部工具栏结束-->
+                <!--数据表格开始-->
+                <div class="layui-card-body layui-table-body layui-table-main">
+                    <table class="layui-table layui-form" id="layListId" lay-filter="employeeToolBarCaoZuo">
+                        <script type="text/html" id="barDemo">
+                            <a class="layui-btn layui-btn-xs" lay-event="pwd">密码</a>
+                            <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+                            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+                        </script>
+                        </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!--数据表格结束-->
+                <script type="text/html" id="switchTpl">
+                    <p name="employeeSex" value="{{d.employeeSex}}">{{ d.employeeSex== 0 ? '<font color=blue>男</font>' :
+                        '<font color=red>女</font>' }}</p>
+                </script>
+                <script type="text/html" id="switchTpl2">
+                    <input type="checkbox" name="status" value="{{d.employeeId}}" lay-skin="switch"
+                           lay-text="在职|离职" lay-filter="choosestatus"
+                           {{ d.status==0?'checked':'' }}>
+                </script>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+
+    layui.use(['laydate', 'form', 'table', 'jquery', 'layer'], function () {
+        var laydate = layui.laydate;
+        var form = layui.form;
+        var table = layui.table;
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        //渲染表格
+        table.render({
+            elem: '#layListId',
+            id: 'layTableId',
+            url: '/employee/list' + location.search,
+            title: '员工管理',
+            cellMinWidth: 100,
+            cols: [
+                //列数据
+                [{
+                    type: 'checkbox',
+                    fixed: 'left'
+                }, {
+                    field: 'employeeId',
+                    title: 'Id',
+                    hide: true,
+                    fixed: 'left'
+                }, {
+                    field: 'loginName',
+                    title: '登陆名',
+                    fixed: 'left',
+                    minWidth: '30'
+                }, {
+                    field: 'employeeName',
+                    title: '真实姓名',
+                    minWidth: '30',
+                }, {
+                    field: 'employeeTel',
+                    title: '手机号',
+                    minWidth: '60'
+
+                }, {
+                    field: 'employeeEmail',
+                    title: '邮箱',
+                }, {
+                    field: 'employeeSex',
+                    title: '性别',
+                    minWidth: '30',
+                    templet: '#switchTpl'
+                }, {
+                    field: 'status',
+                    title: '状态',
+                    templet: '#switchTpl2'
+                }, {
+                    field: 'createTime',
+                    title: '创建时间',
+
+                }, {
+                    field: 'updateTime',
+                    title: '更新时间',
+                }, {
+                    title: '操作',
+                    minWidth: '200',
+                    align: 'center',
+                    toolbar: '#barDemo',
+                }]
+            ],
+
+            response: {
+                statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+            },
+            page: true
+
+        });
+
+        //监听工具条,删除，编辑
+        table.on('tool(employeeToolBarCaoZuo)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'del') {
+                layer.confirm('真的删除行么', function (index) {
+                    var id = data.employeeId;
+                    $.ajax({
+                        url: "/employee/delete/" + id,
+                        method: 'DELETE',
+                        // data: {
+                        //     employeeId: data.employeeId
+                        // },
+                        success: function (res) {
+                            if (res.code == 200) {
+                                layer.alert("删除成功",
+                                    function () {
+                                        //关闭当前frame
+                                        xadmin.close();
+                                        // 可以对父窗口进行刷新
+                                        // table.render();
+                                        xadmin.father_reload();
+                                    });
+                            } else
+                                alert(res.msg);
+                        },
+                        error: function () {
+                            alert("服务器繁忙！");
+                        }
+                    });
+                });
+            } else if (obj.event === 'edit') {
+                xadmin.open('编辑', './employee-edit.html#/id=' + data.employeeId, 800, 500);
+            } else if (obj.event === 'pwd') {
+                xadmin.open('密码', './passwordEdit.html#/id=' + data.employeeId, 800, 500);
+            }
+        });
+        //监听员工的状态  0：在职 1.离职
+        form.on('switch(choosestatus)', function (data) {
+           // alert(data.value)
+            var x = data.elem.checked;
+            if ( x== true) {
+                //alert(data.value)
+                var show = "在职";
+            } else {
+                var show = "离职";
+            }
+            //修改状态
+            layer.open({
+                content: '确认修改为' + show
+                , btn: ['确定', '取消']
+                , yes: function (index, layero) {
+                    data.elem.checked = x;
+                    $.ajax({
+                        url: "/employee/editstatus",
+                        method: 'post',
+                        data: {
+                            employeeId: data.value,
+                            status: data.elem.checked
+                        },
+                        success: function (res) {
+                            if (res.code == 0) {
+                                // layer.msg(d+'成功');
+                                // return false;
+                                layer.alert("成功", {icon: 6},
+                                    function () {
+                                        xadmin.close();
+                                        xadmin.father_reload();
+                                        // return false;
+                                    });
+                            } else
+                                layer.msg(res.msg);
+                        },
+                        error: function (res) {
+                            layer.msg('数据异常，操作失败！');
+                        }
+                    });
+                    layer.close(index);
+                    //按钮【按钮一】的回调
+                }
+                , btn2: function (index, layero) {
+                    //按钮【按钮二】的回调
+                    data.elem.checked = !x;
+                    form.render();
+                    layer.close(index);
+                    //return false 开启该代码可禁止点击该按钮关闭
+                }
+                , cancel: function () {
+                    //右上角关闭回调
+                    data.elem.checked = !x;
+                    form.render();
+                    //return false 开启该代码可禁止点击该按钮关闭
+                }
+            });
+            return false;
+        });
+
+
+        //批量删除
+        var $ = layui.$, active = {
+            //批量删除
+            batchDel: function () {
+                //获取选中的数据
+                var arr = [];
+                var checkStatus = table.checkStatus('layTableId'),
+                    data = checkStatus.data;
+                for (var i = 0; i < data.length; i++) {
+                    arr.push(data[i].employeeId);   // 循环筛选出id
+                }
+
+                if (data.length == 0) {
+                    parent.layer.msg("请选择要删除的用户", {icon: 2});
+                    return;
+                } else {
+                    layer.confirm("你确定要删除吗?", function (index) {
+                        $.ajax({
+                            url: '/employee/deleteBatch',
+                            method: 'post',
+                            traditional: true,//这里设为true就可以了
+                            data: {ids: arr},
+                            success: function (res) {
+                                if (res.code == 200) {
+                                    layer.alert("删除成功", {icon: 6},
+                                        function () {
+                                            //关闭当前frame
+                                            xadmin.close();
+                                            // 可以对父窗口进行刷新
+                                            // table.render();
+                                            xadmin.father_reload();
+                                        });
+                                } else {
+                                    alert(res.msg);
+                                }
+                            },
+                            error: function (data) {
+                                alert("服务器繁忙,请稍后再试！");
+                            }
+                        })
+                        return false;
+                    });
+                }
+            },
+        }
+        $('.demoTable .layui-btn').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        //时间组建
+        laydate.render({
+            elem: '#starttime'
+            , type: 'datetime'
+        });
+
+        laydate.render({
+            elem: '#endtime'
+            , type: 'datetime'
+        });
+
+    });
+
+
+</script>
+<script src="../static/js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" charset="UTF-8">
+    //参数回显
+    var param = new Object();
+    param = getUrlParam();
+    //alert("<<<<"+typeof param["start"]);
+    $('#starttime').attr('value', param["createTime"]);
+    $('#endtime').attr('value', param["updateTime"]);
+    $('#name').attr('value', param["employeeName"]);
+    if(param["status"]==0){
+        $('#isStatu').attr('checked', true);
+    }
+    if(param["status"]==1){
+        $('#isStatus').attr('checked', true);
+    }
+
+
+
+
+    function getUrlParam() {
+        var url = location.search; //获取url中"?"符后的字符串包括‘？’ ，window.location.href获取的是url完整的字符串
+        var theParam = new Object();
+        if (url.indexOf("?") != -1) { //确保‘？’不是最后一个字符串，即携带的参数不为空
+            var str = url.substr(1); //substr是字符串的用法之一，抽取指定字符的数目，这里抽取？后的所有字符
+            strs = str.split("&"); //将获取到的字符串从&分割，输出参数数组，即输出[参数1=xx,参数2=xx,参数3=xx,...]的数组形式
+            for (var i = 0; i < strs.length; i++) { //遍历参数数组
+                theParam[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]); //这里意思是抽取每个参数等号后面的值，unescape是解码的意思
+            }
+        }
+        return theParam; //返回参数值
+    }
+
+
+</script>
+</html>

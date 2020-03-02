@@ -1,5 +1,6 @@
 package com.ycxy.steelsales.mapper.employee;
 
+import com.ycxy.steelsales.pojo.employee.EmployeeQuery;
 import com.ycxy.steelsales.pojo.employee.SteelsaleEmployee;
 import com.ycxy.steelsales.pojo.employee.SteelsaleEmployeeExample;
 import java.util.List;
@@ -29,4 +30,11 @@ public interface SteelsaleEmployeeMapper {
     int updateByPrimaryKeySelective(SteelsaleEmployee record);
 
     int updateByPrimaryKey(SteelsaleEmployee record);
+
+
+    /**
+     * 模糊查询
+     * @param employeeQuery
+     */
+    List<SteelsaleEmployee> fuzzySelect(@Param("employeeQuery") EmployeeQuery employeeQuery);
 }

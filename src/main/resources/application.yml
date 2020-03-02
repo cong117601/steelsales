@@ -39,3 +39,12 @@ logging:
   config:
     com: debug
 debug: true
+#七牛云的工作空间
+qiniu:
+  bucketname: mulis
+  #七牛云工作空间的默认域名
+  img_url_pre: http://q3xosoc97.bkt.clouddn.com/
+  #ak秘钥 创建七牛云账号是会生成 在个人中心可以找到
+  ACCESS_KEY: 8NcZiYhRal9SaG7U3yWR9u1h3RHdouUcsKAFf_w7
+  #sk秘钥 创建七牛云账号是会生成 在个人中心可以找到
+  SECRET_KEY: ysCCKP9CL5aDT_gBY4BxBA2csoXP0zcBgOV1BZL

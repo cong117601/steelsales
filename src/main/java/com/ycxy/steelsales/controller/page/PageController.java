@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class PageController {
     //可以这样设计 但是我想多写点 你能咋滴
-//    @RequestMapping("{page}")
-//    public String toPage(@PathVariable("page") String page){
-//     return page;
-//
-//}
+    @RequestMapping("/{page}")
+    public String toPage(@PathVariable("page") String page){
+     return page;
+
+}
     @RequestMapping("/toError")
     public String toErrorPage() {
         return "error";
