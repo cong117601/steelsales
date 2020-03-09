@@ -1,6 +1,7 @@
 package com.ycxy.steelsales.service.login.impl;
 
 import com.ycxy.steelsales.pojo.employee.SteelsaleEmployee;
+import com.ycxy.steelsales.service.employee.EmployeeService;
 import com.ycxy.steelsales.service.login.LoginService;
 import com.ycxy.steelsales.service.role.RoleService;
 import com.ycxy.steelsales.security.SecurityEmployeeStaff;
@@ -27,6 +28,8 @@ public class EmployeeLoginServiceImpl implements UserDetailsService {
     private LoginService loginService;
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private EmployeeService employeeService;
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         //根据登陆名 查找用户
@@ -34,7 +37,10 @@ public class EmployeeLoginServiceImpl implements UserDetailsService {
         if(employee==null){
             throw new UsernameNotFoundException("账号不存在");
         }
-        //查出该用户所拥有的角色
+        //根据用户名找出id
+//       SteelsaleEmployee employ= employeeService.selectEmployeeByName(s);
+//        //查出该用户所拥有的权限
+//        List<String> employeeFunction=employeeService.selectEmployeeFunction(employ.getEmployeeId());
         List<String> steelsaleRoles = roleService.selectRoleByLoginName(s);
         System.out.println(steelsaleRoles.size());
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();

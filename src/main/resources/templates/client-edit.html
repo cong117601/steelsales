@@ -101,7 +101,7 @@
                 url: '/client/findeclient/' + id,
                 method: 'post',
                 dataStyle: 'json',
-                async:false,
+                // async:false,
                 success: function (res) {
                     if (res.code == 0) {
                         form.val("dataFrm", { //formTest 即 class="layui-form" 所在元素属性 lay-filter="" 对应的值

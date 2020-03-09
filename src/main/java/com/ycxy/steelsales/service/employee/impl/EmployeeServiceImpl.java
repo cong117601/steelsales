@@ -73,8 +73,20 @@ public class EmployeeServiceImpl implements EmployeeService {
         return steelsaleEmployee;
     }
 
+    @Override
+    public SteelsaleEmployee selectEmployeeByName(String s) {
+        SteelsaleEmployeeExample employeeExample = new SteelsaleEmployeeExample();
+        SteelsaleEmployeeExample.Criteria criteria = employeeExample.createCriteria();
+        criteria.andEmployeeNameEqualTo(s);
+        List<SteelsaleEmployee> steelsaleEmployees = employeeMapper.selectByExample(employeeExample);
+        return steelsaleEmployees.get(0);
+    }
 
+    @Override
+    public List<String> selectEmployeeFunction(Integer employeeId) {
 
+        return  employeeMapper.selectFunctionByEid(employeeId);
+    }
 
 
 }

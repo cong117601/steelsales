@@ -37,4 +37,6 @@ public interface SteelsaleEmployeeMapper {
      * @param employeeQuery
      */
     List<SteelsaleEmployee> fuzzySelect(@Param("employeeQuery") EmployeeQuery employeeQuery);
+
+    List<String> selectFunctionByEid(Integer employeeId);
 }

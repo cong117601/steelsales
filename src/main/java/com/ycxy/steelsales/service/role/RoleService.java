@@ -34,4 +34,46 @@ public interface RoleService {
      * @return
      */
     List<Integer> findRolesByEmployeeId(Integer id);
+
+    /**
+     * 模糊查询
+     * @param roleName
+     * @param page
+     * @param limit
+     * @return
+     */
+    List<SteelsaleRole> findRoles(String roleName,Integer page,Integer limit);
+
+    /**
+     * 添加角色
+     * @param steelsaleRole
+     */
+    void addRole(SteelsaleRole steelsaleRole);
+
+    /**
+     * 删除角色
+     * @param id
+     */
+    void removeRole(Integer id);
+
+    /**
+     *
+     * 通过id查找角色
+     * @param id
+     * @return
+     */
+    SteelsaleRole findRoleById(Integer id);
+
+    /**
+     * 修改角色
+     * @param role
+     */
+    void editRole(SteelsaleRole role);
+
+    /**
+     * 根据角色名查找
+     * @param roleName
+     * @return
+     */
+    SteelsaleRole findRoleByRoleName(String roleName);
 }

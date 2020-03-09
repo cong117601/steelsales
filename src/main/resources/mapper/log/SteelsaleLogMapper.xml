@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ycxy.steelsales.mapper.log.SteelsaleLogMapper" >
+  <resultMap id="BaseResultMap" type="com.ycxy.steelsales.pojo.log.SteelsaleLog" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="log_time" property="logTime" jdbcType="TIMESTAMP" />
+    <result column="log_login_name" property="logLoginName" jdbcType="VARCHAR" />
+    <result column="log_remote_addr" property="logRemoteAddr" jdbcType="VARCHAR" />
+    <result column="log_uri" property="logUri" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.ycxy.steelsales.pojo.log.SteelsaleLogWithBLOBs" extends="BaseResultMap" >
+    <result column="log_param" property="logParam" jdbcType="LONGVARCHAR" />
+    <result column="log_desc" property="logDesc" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, log_time, log_login_name, log_remote_addr, log_uri
+  </sql>
+  <sql id="Blob_Column_List" >
+    log_param, log_desc
+  </sql>
+
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.ycxy.steelsales.pojo.log.SteelsaleLogExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from steelsale_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ycxy.steelsales.pojo.log.SteelsaleLogExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from steelsale_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from steelsale_log
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from steelsale_log
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ycxy.steelsales.pojo.log.SteelsaleLogExample" >
+    delete from steelsale_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ycxy.steelsales.pojo.log.SteelsaleLogWithBLOBs" useGeneratedKeys="true" keyProperty="id" >
+    insert into steelsale_log (id, log_time, log_login_name, 
+      log_remote_addr, log_uri, log_param, 
+      log_desc)
+    values (#{id,jdbcType=BIGINT}, #{logTime,jdbcType=TIMESTAMP}, #{logLoginName,jdbcType=VARCHAR}, 
+      #{logRemoteAddr,jdbcType=VARCHAR}, #{logUri,jdbcType=VARCHAR}, #{logParam,jdbcType=LONGVARCHAR}, 
+      #{logDesc,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ycxy.steelsales.pojo.log.SteelsaleLogWithBLOBs" >
+    insert into steelsale_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="logTime != null" >
+        log_time,
+      </if>
+      <if test="logLoginName != null" >
+        log_login_name,
+      </if>
+      <if test="logRemoteAddr != null" >
+        log_remote_addr,
+      </if>
+      <if test="logUri != null" >
+        log_uri,
+      </if>
+      <if test="logParam != null" >
+        log_param,
+      </if>
+      <if test="logDesc != null" >
+        log_desc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="logTime != null" >
+        #{logTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="logLoginName != null" >
+        #{logLoginName,jdbcType=VARCHAR},
+      </if>
+      <if test="logRemoteAddr != null" >
+        #{logRemoteAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="logUri != null" >
+        #{logUri,jdbcType=VARCHAR},
+      </if>
+      <if test="logParam != null" >
+        #{logParam,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="logDesc != null" >
+        #{logDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ycxy.steelsales.pojo.log.SteelsaleLogExample" resultType="java.lang.Integer" >
+    select count(*) from steelsale_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update steelsale_log
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.logTime != null" >
+        log_time = #{record.logTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.logLoginName != null" >
+        log_login_name = #{record.logLoginName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.logRemoteAddr != null" >
+        log_remote_addr = #{record.logRemoteAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.logUri != null" >
+        log_uri = #{record.logUri,jdbcType=VARCHAR},
+      </if>
+      <if test="record.logParam != null" >
+        log_param = #{record.logParam,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.logDesc != null" >
+        log_desc = #{record.logDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update steelsale_log
+    set id = #{record.id,jdbcType=BIGINT},
+      log_time = #{record.logTime,jdbcType=TIMESTAMP},
+      log_login_name = #{record.logLoginName,jdbcType=VARCHAR},
+      log_remote_addr = #{record.logRemoteAddr,jdbcType=VARCHAR},
+      log_uri = #{record.logUri,jdbcType=VARCHAR},
+      log_param = #{record.logParam,jdbcType=LONGVARCHAR},
+      log_desc = #{record.logDesc,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update steelsale_log
+    set id = #{record.id,jdbcType=BIGINT},
+      log_time = #{record.logTime,jdbcType=TIMESTAMP},
+      log_login_name = #{record.logLoginName,jdbcType=VARCHAR},
+      log_remote_addr = #{record.logRemoteAddr,jdbcType=VARCHAR},
+      log_uri = #{record.logUri,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ycxy.steelsales.pojo.log.SteelsaleLogWithBLOBs" >
+    update steelsale_log
+    <set >
+      <if test="logTime != null" >
+        log_time = #{logTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="logLoginName != null" >
+        log_login_name = #{logLoginName,jdbcType=VARCHAR},
+      </if>
+      <if test="logRemoteAddr != null" >
+        log_remote_addr = #{logRemoteAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="logUri != null" >
+        log_uri = #{logUri,jdbcType=VARCHAR},
+      </if>
+      <if test="logParam != null" >
+        log_param = #{logParam,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="logDesc != null" >
+        log_desc = #{logDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.ycxy.steelsales.pojo.log.SteelsaleLogWithBLOBs" >
+    update steelsale_log
+    set log_time = #{logTime,jdbcType=TIMESTAMP},
+      log_login_name = #{logLoginName,jdbcType=VARCHAR},
+      log_remote_addr = #{logRemoteAddr,jdbcType=VARCHAR},
+      log_uri = #{logUri,jdbcType=VARCHAR},
+      log_param = #{logParam,jdbcType=LONGVARCHAR},
+      log_desc = #{logDesc,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ycxy.steelsales.pojo.log.SteelsaleLog" >
+    update steelsale_log
+    set log_time = #{logTime,jdbcType=TIMESTAMP},
+      log_login_name = #{logLoginName,jdbcType=VARCHAR},
+      log_remote_addr = #{logRemoteAddr,jdbcType=VARCHAR},
+      log_uri = #{logUri,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

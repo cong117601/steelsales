@@ -54,4 +54,7 @@ public interface EmployeeService {
     SteelsaleEmployee selectEmployeeById(Integer id);
 
 
+    SteelsaleEmployee selectEmployeeByName(String s);
+
+    List<String> selectEmployeeFunction(Integer employeeId);
 }

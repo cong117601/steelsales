@@ -6,7 +6,10 @@ spring:
     password: 123456
   thymeleaf: #springboot建议将缓存关闭
     cache: false
-
+  data:
+    elasticsearch:
+      cluster-name: elasticsearch
+      cluster-nodes: 192.168.0.130:9300
 
   mvc:
     static-path-pattern: /static/**

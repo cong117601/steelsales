@@ -5,6 +5,7 @@
     <id column="role_id" property="roleId" jdbcType="INTEGER" />
     <result column="role_name" property="roleName" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="role_desc" property="roleDesc" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -65,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    role_id, role_name, create_time
+    role_id, role_name, create_time, role_desc
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ycxy.steelsales.pojo.role.SteelsaleRoleExample" >
     select
@@ -98,10 +99,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.ycxy.steelsales.pojo.role.SteelsaleRole" >
-    insert into steelsale_role (role_id, role_name, create_time
-      )
-    values (#{roleId,jdbcType=INTEGER}, #{roleName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
-      )
+    insert into steelsale_role (role_id, role_name, create_time, 
+      role_desc)
+    values (#{roleId,jdbcType=INTEGER}, #{roleName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{roleDesc,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.ycxy.steelsales.pojo.role.SteelsaleRole" >
     insert into steelsale_role
@@ -115,6 +116,9 @@
       <if test="createTime != null" >
         create_time,
       </if>
+      <if test="roleDesc != null" >
+        role_desc,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="roleId != null" >
@@ -125,6 +129,9 @@
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="roleDesc != null" >
+        #{roleDesc,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -146,6 +153,9 @@
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.roleDesc != null" >
+        role_desc = #{record.roleDesc,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -155,7 +165,8 @@
     update steelsale_role
     set role_id = #{record.roleId,jdbcType=INTEGER},
       role_name = #{record.roleName,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      role_desc = #{record.roleDesc,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -169,13 +180,17 @@
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="roleDesc != null" >
+        role_desc = #{roleDesc,jdbcType=VARCHAR},
+      </if>
     </set>
     where role_id = #{roleId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.ycxy.steelsales.pojo.role.SteelsaleRole" >
     update steelsale_role
     set role_name = #{roleName,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      role_desc = #{roleDesc,jdbcType=VARCHAR}
     where role_id = #{roleId,jdbcType=INTEGER}
   </update>
 </mapper>

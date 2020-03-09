@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html class="x-admin-sm">
+<head>
+    <meta charset="UTF-8">
+    <title>权限列表</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="stylesheet" href="../static/css/font.css">
+    <link rel="stylesheet" href="../static/css/xadmin.css">
+    <link rel="stylesheet" href="../static/ztree/zTreeStyle/zTreeStyle.css"/>
+    <link rel="stylesheet" href="../static/ztree/demo.css"/>
+    <script src="../static/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../static/js/xadmin.js"></script>
+    <script type="text/javascript" src="../static/js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="../static/ztree/jquery.ztree.all-3.5.min.js"></script>
+
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="x-nav">
+          <span class="layui-breadcrumb">
+            <a href="">首页</a>
+            <a href="">演示</a>
+            <a>
+              <cite>导航元素</cite></a>
+          </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+       onclick="location.reload()" title="刷新">
+        <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>
+</div>
+<div class="layui-form-item">
+    <label class="col-md-2 control-label layui-form-label">权限树</label>
+    <div class="col-md-10">
+        <ul id="treeDemo" class="ztree"></ul>
+    </div>
+</div>
+<div class="x-body " style="display:none;" id="functionFrm">
+    <form class="layui-form">
+        <input type="text" id="functionId" name="functionId" style="display:none;" autocomplete="off"
+               class="layui-input">
+        <div class="layui-form-item">
+            <label for="functionName" class="layui-form-label">
+                <span class="x-red">*</span>菜单名
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="functionName" name="functionName" value="" autocomplete="off"
+                       class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>将会成为菜单名
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="functionUrl" class="layui-form-label">
+                <span class="x-red"></span>链接
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="functionUrl" name="functionUrl" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red"></span>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">类型</label>
+            <div class="layui-input-inline">
+                <select name="functionType" value="" id="functionType">
+                    <option value="1" selected="">菜单</option>
+                    <option value="2">按钮</option>
+                </select>
+            </div>
+        </div>
+        <!--        <div class="layui-form-item">-->
+        <!--            <label for="L_name" class="layui-form-label">-->
+        <!--                <span class="x-red"></span>权限值-->
+        <!--            </label>-->
+        <!--            <div class="layui-input-inline">-->
+        <!--                <input type="text" id="L_permission" name="permission" lay-verify="permission" autocomplete="off"-->
+        <!--                       class="layui-input">-->
+        <!--            </div>-->
+        <!--            <div class="layui-form-mid layui-word-aux">-->
+        <!--                <span class="x-red"></span>-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <div class="layui-form-item">
+            <label for="sort" class="layui-form-label">
+                <span class="x-red">*</span>排序
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="sort" name="sort" autocomplete="off"
+                       class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <button class="layui-btn" lay-filter="addF" lay-submit="">
+                保存
+            </button>
+<!--            <button class="btn btn-danger" cla onclick="checkNodeFalse();" value="清空"/>-->
+        </div>
+    </form>
+</div>
+</body>
+<script>
+    layui.use(['form', 'jquery'], function () {
+        var $ = layui.jquery;
+        var form = layui.form;
+
+        $(function () {
+            onLoadZTree();
+        });
+
+        var setting = {
+            view: {
+                dblClickExpand: false,
+                showLine: false,
+                selectedMulti: false,
+                addHoverDom: addHoverDom, //显示按钮
+                removeHoverDom: removeHoverDom, //隐藏按钮
+                fontCss: function (treeId, treeNode) {
+                    //如果是功能权限则标红
+                    return treeNode.functionType == 2 ? {color: "red"} : {};
+                }
+            },
+            edit: {
+                enable: true,
+                editNameSelectAll: true,
+                removeTitle: '删除',
+                renameTitle: '重命名'
+            },
+            data: {
+                simpleData: {
+                    enable: true,  //true 、 false 分别表示 使用 、 不使用 简单数据模式
+                    idKey: "functionId",   //节点数据中保存唯一标识的属性名称
+                    pIdKey: "parentId",    //节点数据中保存其父节点唯一标识的属性名称
+                    rootPId: -1  //用于修正根节点父节点数据，即 pIdKey 指定的属性值
+                },
+                key: {
+                    name: "functionName"  //zTree 节点数据保存节点名称的属性名称  默认值："name"
+                }
+            },
+            callback: {
+                beforeRemove: beforeRemove, //点击删除时触发，用来提示用户是否确定删除
+                beforeEditName: beforeEditName, //点击编辑时触发，用来判断该节点是否能编辑,是否进入编辑状态
+                beforeRename: beforeRename, //编辑结束时触发，用来验证输入的数据是否符合要求
+            }
+        };
+
+        function onLoadZTree() {
+            $.ajax({
+                async: false, //是否异步
+                cache: false, //是否使用缓存
+                type: "get",
+                url: "/function/listAllFunction",
+                success: function (data) {
+                    treeNodes = data.menulists; //把后台封装好的简单Json格式赋给treeNodes
+                }
+            });
+            var t = $("#treeDemo");
+            t = $.fn.zTree.init(t, setting, treeNodes);
+            t.expandAll(false);
+        }
+
+        //新增
+        function addHoverDom(treeId, treeNode) {
+            var sObj = $("#" + treeNode.tId + "_span");
+            if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0)
+                return;
+            var addStr = "<span class='button add' id='addBtn_" + treeNode.tId + "' title='新增'  οnfοcus='this.blur();'></span>";
+            sObj.after(addStr);
+            var btn = $("#addBtn_" + treeNode.tId);
+            if (btn) btn.bind("click", function () {
+                var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+                layer.open({
+                    type: 1,
+                    content: $('#functionFrm'), //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
+                    title: '请输入节点名称'
+                }),
+                    //监听表单提交
+                    form.on('submit(addF)', function (data) {
+                        var pid = treeNode.functionId;
+                        data.field.parentId = pid;
+                        alert(JSON.stringify(data.field));
+                        $.ajax({
+                            type: "POST",
+                            async: false,
+                            url: "/function/add",
+                            data: data.field,
+                            success: function (data) {
+                                if (data.code == 0) {
+                                    var val = $("#functionName").val();
+                                    zTree.addNodes(treeNode, {
+                                        parentId: treeNode.id,
+                                        functionName: val
+                                    });
+                                    console.log(val)
+                                    onLoadZTree() //重新加载，不然再次添加会报错
+                                    layer.alert("增加成功", {
+                                            icon: 6
+                                        },
+                                        function () {
+                                            //关闭当前frame
+                                            xadmin.close();
+                                            // 可以对父窗口进行刷新
+                                            xadmin.father_reload();
+                                        });
+                                } else {
+                                    onLoadZTree()
+                                    layer.msg('' + data.msg + '', {
+                                        icon: 5,
+                                        time: 1000
+                                    });
+                                }
+                            }
+                        });
+                        return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                    })
+            });
+        };
+
+        //移除鼠标隐藏按钮
+        function removeHoverDom(treeId, treeNode) {
+            $("#addBtn_" + treeNode.tId).unbind().remove();
+        }
+
+        //初始化修改权限信息
+        function beforeEditName(treeId, treeNode) {
+            $("#functionName").focus();
+            layer.open({
+                type: 1,
+                content: $('#functionFrm'), //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
+                title: '请输入节点名称'
+            });
+            $("#functionId").val(treeNode.functionId);
+            $("#functionName").val(treeNode.functionName);
+            $("#functionUrl").val(treeNode.functionUrl);
+            alert(treeNode.functionType)
+            $("#functionType").val(treeNode.functionType)//选择不上
+            $("#functionType option[value="+treeNode.functionType+"]").attr("selected", "selected");
+            $("#sort").val(treeNode.sort);
+            return true;
+        }
+
+
+        //执行修改
+        function beforeRename(treeId, treeNode) {
+            //监听提交
+            form.on('submit(addF)', function (data) {
+                // var pid = treeNode.functionId;
+                // data.field.parentId = pid;
+                alert(JSON.stringify(data.field));
+                $.ajax({
+                    type: "POST",
+                    async: false,
+                    url: "/function/update",
+                    data: data.field,
+                    success: function (data) {
+                        if (data.code == 0) {
+                            onLoadZTree() //重新加载，不然再次添加会报错
+                            layer.msg('修改成功', {
+                                    icon: 1,
+                                    time: 1000
+                                },
+                                function () {
+                                    //关闭当前frame
+                                    xadmin.close();
+                                    // 可以对父窗口进行刷新
+                                    xadmin.father_reload();
+                                }
+                            );
+                            return true;
+                        } else {
+                            onLoadZTree()
+                            layer.msg('' + data.msg + '', {
+                                icon: 5,
+                                time: 1000
+                            });
+                            return false;
+                        }
+                    }
+                })
+            });
+        }
+
+        //删除
+        function beforeRemove(treeId, treeNode) {
+            alert(treeNode.functionId)
+            if (treeNode.isParent == true) {
+                layer.msg('请首先删除子节点', {
+                    icon: 5,
+                    time: 1000
+                });
+                return false;
+            }
+            layer.confirm('确认要删除吗？', {
+                    btn: ['确定', '取消']
+                }, function (index) {
+                    $.ajax({
+                        type: "POST",
+                        async: false,
+                        url: "/function/delete",
+                        data: {
+                            "functionId": treeNode.functionId,
+                            // "parentId": treeNode.parentId
+                        },
+                        success: function (data) {
+                            if (data.code == 0) {
+                                onLoadZTree() //重新加载，不然再次添加会报错
+                                layer.msg('删除成功', {
+                                    icon: 1,
+                                    time: 1000
+                                });
+                                return true;
+                            } else {
+                                onLoadZTree()
+                                layer.msg('' + data.msg + '', {
+                                    icon: 5,
+                                    time: 1000
+                                });
+                                return false;
+                            }
+                        }
+                    });
+                    layer.close(index);
+                },
+                function () {//取消时刷新tree
+                    onLoadZTree()
+                    layer.msg('已取消', {
+                        icon: 6,
+                        time: 1000
+                    });
+                    return false;
+                }
+            );
+        }
+
+    });
+
+    //取消所选
+    function checkNodeFalse() {
+        ztreeObject = $.fn.zTree.getZTreeObj("treeDemo");
+        ztreeObject.checkAllNodes(false);
+    }
+
+</script>
+</html>

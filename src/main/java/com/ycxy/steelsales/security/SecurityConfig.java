@@ -35,10 +35,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/admin/user/getuserList",
 //                        "/admin/user/updateUserPwd",
 //                        "/admin/user/updateuserstate").hasAnyAuthority("ROLE_MANAGER")//经理
-//                .antMatchers("/admin/sysfunctioin/showfunctionztree",
-//
-//                        "/admin/article/updatearticle/1").hasAnyAuthority("ROLE_EMPLOYEE")//employee 普通员工
-                //.anyRequest().authenticated()//指定其他路径必须登陆后才可访问
+                .antMatchers("/employee/list","/employee-list2"
+                        ).hasAnyAuthority("ROLE_EMPLOYEE")//employee 普通员工
+                .anyRequest().authenticated()//指定其他路径必须登陆后才可访问
                 .and()/* 完成上一个配置，进行下一步配置 */
 //                .sessionManagement() //session超时管理
 //                .invalidSessionUrl("/login") //session超时跳向的url

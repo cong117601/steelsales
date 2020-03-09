@@ -1,4 +1,4 @@
-package com.ycxy.steelsales.controller;
+package com.ycxy.steelsales.controller.client;
 
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;

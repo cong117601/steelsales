@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+<head>
+    <meta charset="UTF-8">
+    <title>角色添加</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="stylesheet" href="../static/css/font.css">
+    <link rel="stylesheet" href="../static/css/xadmin.css">
+    <link rel="stylesheet" href="../static/ztree/zTreeStyle/zTreeStyle.css"/>
+    <link rel="stylesheet" href="../static/ztree/demo.css"/>
+    <script src="../static/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../static/js/xadmin.js"></script>
+    <script type="text/javascript" src="../static/js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="../static/ztree/jquery.ztree.all-3.5.min.js"></script>
+<!--    <script type="text/javascript" src="../static/ztree/jquery.ztree.excheck-3.5.min.js"></script>-->
+    <!--    <script type="text/javascript" src="../static/ztree/ztree-menu.js"></script>-->
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+
+    <![endif]-->
+</head>
+<!--lay-verify="required" lay-verify="email" lay-verify="phone" lay-verify="identity" -->
+<body>
+<div class="layui-fluid">
+    <div class="layui-row">
+        <form class="layui-form">
+            <div class="layui-form-item">
+                <label for="roleName" class="layui-form-label">
+                    <span class="x-red">*</span>角色</label>
+                <div class="layui-input-inline">
+                    <input type="hidden" id="roleId" name="roleId"
+                           autocomplete="off" class="layui-input">
+                    <input type="text" id="roleName" name="roleName" placeholder="请输入角色名称"
+                           autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">*</span>必须大写
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="roleDesc" class="layui-form-label">
+                    <span class="x-red">*</span>角色描述</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="roleDesc" name="roleDesc" placeholder="请输入角色描述" autocomplete="off"
+                           class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">*</span>角色描述或者该角色权限信息
+                </div>
+            </div>
+
+            <!--添加角色时选择该角色权限  权限树-->
+            <div class="layui-form-item">
+                <label class="col-md-2 control-label layui-form-label">权限</label>
+                <div class="col-md-10">
+                    <!--  <input type="hidden" value="" name="selectedFunctionIds" id="selectedFunctionIds" />-->
+                    <ul id="treeDemo" class="ztree"></ul>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <button class="layui-btn" lay-filter="add" lay-submit="">增加</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+<script>
+    var settingss = {
+        open: true,
+        data: {
+            simpleData: {
+                enable: true,  //true 、 false 分别表示 使用 、 不使用 简单数据模式
+                idKey: "functionId",   //节点数据中保存唯一标识的属性名称
+                pIdKey: "parentId",    //节点数据中保存其父节点唯一标识的属性名称
+                rootPId: -1  //用于修正根节点父节点数据，即 pIdKey 指定的属性值
+            },
+            key: {
+                name: "functionName"  //zTree 节点数据保存节点名称的属性名称  默认值："name"
+            }
+        },
+        check: {
+            enable: true,  //true 、 false 分别表示 显示 、不显示 复选框或单选框
+            nocheckInherit: true   //当父节点设置 nocheck = true 时，设置子节点是否自动继承 nocheck = true
+        },
+        edit: {
+            enable: true, //如果enable为flase，那么树就不能移动了
+            isSimpleData: true, //数据是否采用简单 Array 格式，默认false
+            treeNodeKey: "functionId",  //在isSimpleData格式下，当前节点id属性
+            treeNodeParentKey: "parentId",//在isSimpleData格式下，当前节点的父节点id属性
+            showLine: true, //是否显示节点间的连线
+        }
+        // callBack:{
+        //     beforeRemove:zTreeBeforeRemove //用于捕获节点被删除之前的事件回调函数，并且根据返回值确定是否允许删除操作
+        // }
+    };
+
+    $(document).ready(function () {
+        $.ajax({
+            type: "get",
+            url: "/function/listAllFunction",
+            async: true,
+            success: function (res) {
+                zTreeObj = $.fn.zTree.init($("#treeDemo"), settingss, res.menulists); //初始化树
+                zTreeObj.expandAll(true);   //true 节点全部展开、false节点收缩
+            }
+        });
+    });
+//获取所选节点的id
+    function getCheckedMenuIds(){
+        var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+        var nodes = treeObj.getCheckedNodes(true);
+        var length = nodes.length;
+        var functionIds='';
+        if(nodes!=null && nodes.length>0){
+            for(var i=0;i<nodes.length;i++){
+                functionIds+=nodes[i].functionId+',';
+            }
+        }
+        return functionIds;
+    }
+
+    layui.use(['form', 'layer', 'code'],
+        function () {
+            var form = layui.form;
+            var layer = layui.layer;
+            //监听提交
+            form.on('submit(add)',
+                function (data) {
+                    var permissionIds = getCheckedMenuIds();
+                    data.field.permissionIds = permissionIds;
+                    alert(JSON.stringify(data.field));
+                    //发异步
+                    $.ajax({
+                        url: '/role/add',
+                        method: 'post',
+                        dataStyle:'json',
+                        data: data.field,
+                        success: function (res) {
+                            if (res.code == 0) {
+                                layer.alert("增加成功", {
+                                        icon: 6
+                                    },
+                                    function () {
+                                        //关闭当前frame
+                                        xadmin.close();
+                                        // 可以对父窗口进行刷新
+                                        xadmin.father_reload();
+                                    });
+                            } else
+                                layer.alert(res.msg)
+                        },
+                        error: function () {
+                            layer.alert("服务器繁忙", {icon: 5})
+                        }
+                    });
+                    return false;
+                });
+
+        });
+    // function zTreeBeforeRemove(treeId, treeNode) {
+    //     return false;
+    // }
+    //ztree
+
+
+</script>
+<script>
+
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+</body>
+
+</html>

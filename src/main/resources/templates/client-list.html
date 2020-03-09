@@ -217,7 +217,6 @@
             var type = $(this).data('type');
             active[type] ? active[type].call(this) : '';
         });
-
         //监听单元格工具条
         table.on('tool(clientTable)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
             //获取选中行数据
@@ -225,7 +224,6 @@
             var id = data.clientId;
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
             if (layEvent === 'del') { //删除
-
                 layer.confirm('真的删除行么', function (index) {
                     //向服务端发送删除指令
                     $.ajax({
@@ -233,7 +231,7 @@
                         method: 'post',
                         success: function (res) {
                             if (res.code == 0) {
-                                layer.alert("删除成功", {icon: 6}),
+                                layer.alert("删除成功", {icon: 6},
                                     //刷新窗口
                                     function () {
                                         //关闭当前frame
@@ -242,6 +240,7 @@
                                         // table.render();
                                         xadmin.father_reload();
                                     }
+                                )
                             }
                         },
                         error: function (res) {

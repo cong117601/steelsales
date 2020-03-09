@@ -4,10 +4,11 @@
     <resultMap id="roleMap" type="com.ycxy.steelsales.pojo.role.SteelsaleRole">
         <id column="role_id" property="roleId"></id>
         <result property="roleName" column="role_name"></result>
+        <result property="roleDesc" column="role_desc"></result>
         <result property="createTime" column="create_time"></result>
     </resultMap>
     <sql id="Base_Column_List">
-    role_id, role_name, create_time
+    role_id, role_name,role_desc, create_time
   </sql>
     <select id="selectAllRoleName" resultType="String">
         select role_name roleName from steelsale_role
@@ -15,7 +16,6 @@
 
     <select id="selectRoleNameByLoginName" parameterType="java.lang.String"
             resultType="java.lang.String">
-
 
         SELECT sr.role_name FROM steelsale_role sr
         LEFT JOIN steelsale_employee_role ser
@@ -29,6 +29,17 @@
         SELECT
         <include refid="Base_Column_List"></include>
         FROM steelsale_role sr
+    </select>
+
+    <select id="selectAlls" resultMap="roleMap" parameterType="map">
+        SELECT
+        <include refid="Base_Column_List"></include>
+        FROM steelsale_role sr
+        <where>
+            <if test="roleName!=null and roleName!=''">
+                and role_name like concat('%',#{roleName},'%')
+            </if>
+        </where>
     </select>
 
     <select id="selectRoleIdByEid" parameterType="java.lang.Integer" resultType="java.lang.Integer">

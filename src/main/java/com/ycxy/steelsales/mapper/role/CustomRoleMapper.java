@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 自定义角色mapper
@@ -36,4 +37,6 @@ public interface CustomRoleMapper {
      * @return
      */
     List<Integer> selectRoleIdByEid(Integer id);
+
+    List<SteelsaleRole> selectAlls(Map map);
 }

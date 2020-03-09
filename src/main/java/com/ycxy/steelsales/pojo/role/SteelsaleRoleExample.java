@@ -294,6 +294,76 @@ public class SteelsaleRoleExample {
             addCriterion("create_time not between", value1, value2, "createTime");
             return (Criteria) this;
         }
+
+        public Criteria andRoleDescIsNull() {
+            addCriterion("role_desc is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleDescIsNotNull() {
+            addCriterion("role_desc is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleDescEqualTo(String value) {
+            addCriterion("role_desc =", value, "roleDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleDescNotEqualTo(String value) {
+            addCriterion("role_desc <>", value, "roleDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleDescGreaterThan(String value) {
+            addCriterion("role_desc >", value, "roleDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleDescGreaterThanOrEqualTo(String value) {
+            addCriterion("role_desc >=", value, "roleDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleDescLessThan(String value) {
+            addCriterion("role_desc <", value, "roleDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleDescLessThanOrEqualTo(String value) {
+            addCriterion("role_desc <=", value, "roleDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleDescLike(String value) {
+            addCriterion("role_desc like", value, "roleDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleDescNotLike(String value) {
+            addCriterion("role_desc not like", value, "roleDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleDescIn(List<String> values) {
+            addCriterion("role_desc in", values, "roleDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleDescNotIn(List<String> values) {
+            addCriterion("role_desc not in", values, "roleDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleDescBetween(String value1, String value2) {
+            addCriterion("role_desc between", value1, value2, "roleDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleDescNotBetween(String value1, String value2) {
+            addCriterion("role_desc not between", value1, value2, "roleDesc");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
